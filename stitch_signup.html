@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>NeonChat - Sign Up</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary": "#00363a",
+                        "on-primary": "#1000a9",
+                        "surface-bright": "#33394c",
+                        "surface-midnight": "#020617",
+                        "on-secondary-fixed-variant": "#5516be",
+                        "on-secondary-container": "#c4abff",
+                        "on-error-container": "#ffdad6",
+                        "surface-container-lowest": "#070d1f",
+                        "border-glass": "rgba(255, 255, 255, 0.12)",
+                        "primary-fixed-dim": "#c0c1ff",
+                        "tertiary-container": "#00848c",
+                        "on-primary-container": "#0d0096",
+                        "on-tertiary-container": "#000607",
+                        "surface-variant": "#2e3447",
+                        "secondary": "#d0bcff",
+                        "primary-container": "#8083ff",
+                        "surface-container-high": "#23293c",
+                        "error-container": "#93000a",
+                        "inverse-primary": "#494bd6",
+                        "tertiary-fixed": "#75f5ff",
+                        "on-error": "#690005",
+                        "glow-primary": "rgba(99, 102, 241, 0.4)",
+                        "background": "#0c1324",
+                        "surface-container-low": "#151b2d",
+                        "surface-tint": "#c0c1ff",
+                        "outline": "#908fa0",
+                        "on-surface": "#dce1fb",
+                        "secondary-fixed-dim": "#d0bcff",
+                        "on-secondary-fixed": "#23005c",
+                        "secondary-fixed": "#e9ddff",
+                        "on-tertiary-fixed": "#002022",
+                        "on-primary-fixed-variant": "#2f2ebe",
+                        "secondary-container": "#571bc1",
+                        "tertiary": "#03dbe7",
+                        "on-secondary": "#3c0091",
+                        "surface-container": "#191f31",
+                        "surface-dim": "#0c1324",
+                        "inverse-surface": "#dce1fb",
+                        "on-background": "#dce1fb",
+                        "on-tertiary-fixed-variant": "#004f54",
+                        "outline-variant": "#464554",
+                        "on-surface-muted": "#94a3b8",
+                        "inverse-on-surface": "#2a3043",
+                        "surface-glass": "rgba(255, 255, 255, 0.04)",
+                        "primary": "#c0c1ff",
+                        "on-primary-fixed": "#07006c",
+                        "surface-container-highest": "#2e3447",
+                        "primary-fixed": "#e1e0ff",
+                        "tertiary-fixed-dim": "#03dbe7",
+                        "on-surface-variant": "#c7c4d7",
+                        "surface": "#0c1324",
+                        "error": "#ffb4ab"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gap-sm": "8px",
+                        "gap-md": "16px",
+                        "gutter": "16px",
+                        "margin-desktop": "24px",
+                        "sidebar": "280px",
+                        "margin-mobile": "16px",
+                        "gap-lg": "24px",
+                        "gap-xs": "4px"
+                    },
+                    "fontFamily": {
+                        "headline-sm": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "headline-md-mobile": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "label-caps": ["Inter"],
+                        "display-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-sm": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "headline-md-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .glass-panel {
+            background-color: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+        }
+        
+        .input-glass {
+            background-color: rgba(2, 6, 23, 0.5); /* 50% darker than card base */
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            transition: all 0.3s ease;
+        }
+        
+        .input-glass:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 10px rgba(99, 102, 241, 0.3);
+            outline: none;
+            color: #6366f1; /* cursor color effectively */
+        }
+
+        .btn-primary {
+            background-color: #6366f1;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
+            transform: translateY(-1px);
+        }
+
+        .btn-glass {
+            background-color: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            transition: all 0.3s ease;
+        }
+
+        .btn-glass:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-color: #8b5cf6;
+        }
+
+        .bg-mesh {
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(99, 102, 241, 0.15), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(139, 92, 246, 0.15), transparent 25%);
+        }
+    </style>
+</head>
+<body class="bg-surface-midnight text-on-surface min-h-screen flex items-center justify-center bg-mesh font-body-md overflow-hidden relative">
+<!-- Ambient glowing orbs for backdrop depth -->
+<div class="absolute top-[-10%] left-[-10%] w-[40vw] h-[40vw] rounded-full bg-[#6366f1] opacity-5 blur-[120px] pointer-events-none"></div>
+<div class="absolute bottom-[-10%] right-[-10%] w-[30vw] h-[30vw] rounded-full bg-[#8b5cf6] opacity-5 blur-[100px] pointer-events-none"></div>
+<main class="w-full max-w-[440px] px-margin-mobile md:px-0 relative z-10">
+<!-- Brand Header -->
+<div class="text-center mb-gap-lg">
+<h1 class="font-display-lg text-display-lg text-primary tracking-tight mb-gap-xs">NeonChat</h1>
+<p class="font-body-lg text-body-lg text-on-surface-muted">Executive Suite</p>
+</div>
+<!-- Glass Card -->
+<div class="glass-panel rounded-xl p-margin-desktop md:p-[32px] shadow-2xl">
+<h2 class="font-headline-md-mobile md:font-headline-md text-headline-md-mobile md:text-headline-md text-on-surface mb-gap-lg">Create Account</h2>
+<form action="#" class="space-y-gap-md" method="POST">
+<!-- Full Name -->
+<div>
+<label class="block font-label-caps text-label-caps text-on-surface-muted mb-gap-xs uppercase" for="fullName">Full Name</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-muted pointer-events-none">person</span>
+<input class="w-full input-glass rounded-lg py-2 pl-10 pr-3 text-on-surface font-body-md placeholder:text-outline-variant focus:ring-0" id="fullName" name="fullName" placeholder="Jane Doe" required="" type="text"/>
+</div>
+</div>
+<!-- Work Email -->
+<div>
+<label class="block font-label-caps text-label-caps text-on-surface-muted mb-gap-xs uppercase" for="email">Work Email</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-muted pointer-events-none">mail</span>
+<input class="w-full input-glass rounded-lg py-2 pl-10 pr-3 text-on-surface font-body-md placeholder:text-outline-variant focus:ring-0" id="email" name="email" placeholder="jane@company.com" required="" type="email"/>
+</div>
+</div>
+<!-- Password -->
+<div>
+<label class="block font-label-caps text-label-caps text-on-surface-muted mb-gap-xs uppercase" for="password">Password</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-muted pointer-events-none">lock</span>
+<input class="w-full input-glass rounded-lg py-2 pl-10 pr-3 text-on-surface font-body-md placeholder:text-outline-variant focus:ring-0" id="password" name="password" placeholder="••••••••" required="" type="password"/>
+</div>
+</div>
+<!-- Terms -->
+<div class="flex items-start mt-gap-md mb-gap-lg">
+<div class="flex h-5 items-center">
+<input class="h-4 w-4 rounded border-glass bg-surface-midnight text-[#6366f1] focus:ring-[#6366f1] focus:ring-offset-surface-midnight cursor-pointer transition-colors" id="terms" name="terms" required="" type="checkbox"/>
+</div>
+<div class="ml-3 text-sm">
+<label class="font-body-md text-body-md text-on-surface-muted" for="terms">
+                            I agree to the <a class="text-primary hover:text-inverse-primary transition-colors underline decoration-border-glass hover:decoration-primary" href="#">Terms of Service</a> and <a class="text-primary hover:text-inverse-primary transition-colors underline decoration-border-glass hover:decoration-primary" href="#">Privacy Policy</a>.
+                        </label>
+</div>
+</div>
+<!-- Submit Button -->
+<button class="w-full btn-primary rounded-lg py-3 font-headline-sm text-headline-sm flex justify-center items-center gap-gap-sm mt-gap-lg" type="submit">
+<span>Create Account</span>
+<span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+</button>
+</form>
+<!-- Divider -->
+<div class="relative my-gap-lg">
+<div aria-hidden="true" class="absolute inset-0 flex items-center">
+<div class="w-full border-t border-border-glass"></div>
+</div>
+<div class="relative flex justify-center">
+<span class="px-2 bg-surface-container-low text-on-surface-muted font-label-caps text-label-caps uppercase rounded-sm">Or</span>
+</div>
+</div>
+<!-- Sign in Link -->
+<div class="text-center">
+<p class="font-body-md text-body-md text-on-surface-muted">
+                    Already have an account? 
+                    <a class="font-headline-sm text-headline-sm text-primary hover:text-inverse-primary transition-colors ml-1" href="#">Sign in</a>
+</p>
+</div>
+</div>
+<!-- Minimal Footer inside the layout flow -->
+<div class="text-center mt-gap-lg">
+<p class="font-label-caps text-label-caps text-on-surface-muted opacity-50 uppercase">© 2024 NeonChat Executive. Secure access.</p>
+</div>
+</main>
+</body></html>

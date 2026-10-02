@@ -1,0 +1,239 @@
+@import "tailwindcss";
+
+@theme {
+  --color-surface: #0f131c;
+  --color-background: #0f131c;
+  --color-surface-dim: #0a0e16;
+  --color-surface-container-lowest: #0a0e16;
+  --color-surface-container-low: #141822;
+  --color-surface-container: #1a1e28;
+  --color-surface-container-high: #222734;
+  --color-surface-container-highest: #2c3240;
+  --color-on-surface: #e2e7f3;
+  --color-on-surface-variant: #929cb2;
+  --color-primary: #cdffde;
+  --color-primary-container: #00f5a0;
+  --color-on-primary-container: #003b24;
+  --color-secondary: #4edea3;
+  --color-secondary-container: #00a572;
+  --color-outline: #2a3140;
+  --color-outline-variant: #1e2430;
+
+  --spacing-container-margin: 24px;
+  --spacing-sidebar-width: 320px;
+  --spacing-element-gap-sm: 8px;
+  --spacing-gutter: 16px;
+  --spacing-element-gap-md: 16px;
+
+  --font-body-md: "Inter", sans-serif;
+  --font-body-lg: "Inter", sans-serif;
+  --font-label-caps: "Inter", sans-serif;
+  --font-display-lg: "Inter", sans-serif;
+  --font-chat-bubble: "Inter", sans-serif;
+  --font-headline-md: "Inter", sans-serif;
+  --font-headline-sm: "Inter", sans-serif;
+}
+
+@utility text-body-md {
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
+}
+
+@utility text-body-lg {
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+}
+
+@utility text-label-caps {
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+}
+
+@utility text-display-lg {
+  font-size: 48px;
+  line-height: 56px;
+  letter-spacing: -0.02em;
+  font-weight: 700;
+}
+
+@utility text-chat-bubble {
+  font-size: 15px;
+  line-height: 22px;
+  font-weight: 400;
+}
+
+@utility text-headline-md {
+  font-size: 24px;
+  line-height: 32px;
+  letter-spacing: -0.01em;
+  font-weight: 600;
+}
+
+@utility text-headline-sm {
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: 600;
+}
+
+body {
+  background-color: var(--color-surface-dim);
+  color: var(--color-on-surface);
+}
+
+.bg-acrylic-canvas {
+  background-color: #07090e;
+  background-image:
+    radial-gradient(ellipse 70% 55% at 15% 15%, rgba(16, 185, 129, 0.14) 0%, transparent 70%),
+    radial-gradient(ellipse 65% 50% at 85% 75%, rgba(139, 92, 246, 0.12) 0%, transparent 65%),
+    radial-gradient(ellipse 50% 40% at 50% 50%, rgba(6, 78, 59, 0.18) 0%, transparent 75%);
+}
+
+.smoked-panel {
+  background: rgba(18, 24, 38, 0.68);
+  backdrop-filter: blur(28px) saturate(190%);
+  -webkit-backdrop-filter: blur(28px) saturate(190%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.12),
+    inset 0 0 20px 0 rgba(16, 185, 129, 0.03),
+    0 16px 40px -10px rgba(0, 0, 0, 0.65);
+}
+
+.smoked-bubble-incoming {
+  background: rgba(20, 26, 40, 0.72);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.1),
+    0 6px 20px -4px rgba(0, 0, 0, 0.45);
+}
+
+.smoked-bubble-outgoing {
+  background: linear-gradient(135deg, rgba(6, 78, 59, 0.7) 0%, rgba(15, 60, 60, 0.62) 100%);
+  backdrop-filter: blur(24px) saturate(200%);
+  -webkit-backdrop-filter: blur(24px) saturate(200%);
+  border: 1px solid rgba(52, 211, 153, 0.3);
+  box-shadow: 
+    inset 0 1px 0 0 rgba(110, 231, 183, 0.28),
+    inset 0 0 16px 0 rgba(16, 185, 129, 0.12),
+    0 8px 24px -4px rgba(5, 150, 105, 0.25);
+}
+
+.smoked-bubble-media {
+  background: rgba(14, 20, 32, 0.8);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(52, 211, 153, 0.24);
+  box-shadow: 
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.15),
+    0 12px 32px -6px rgba(4, 120, 87, 0.25),
+    0 4px 16px rgba(0, 0, 0, 0.5);
+}
+
+.smoked-icon-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.smoked-icon-btn:hover {
+  background: rgba(16, 185, 129, 0.12);
+  border-color: rgba(52, 211, 153, 0.3);
+  box-shadow: inset 0 1px 0 0 rgba(110, 231, 183, 0.2), 0 0 14px rgba(16, 185, 129, 0.25);
+  color: #ecfdf5;
+}
+.smoked-icon-btn:active {
+  transform: scale(0.92);
+  background: rgba(16, 185, 129, 0.2);
+}
+
+.emerald-glow-btn {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  box-shadow: 
+    0 0 20px rgba(16, 185, 129, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.emerald-glow-btn:hover {
+  background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+  box-shadow: 
+    0 0 26px rgba(52, 211, 153, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.45);
+}
+.emerald-glow-btn:active {
+  transform: scale(0.92);
+}
+
+* {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Signup Component specific styles */
+.input-glass {
+    background-color: rgba(10, 14, 22, 0.5); 
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    transition: all 0.3s ease;
+}
+
+.input-glass:focus {
+    border-color: #00f5a0;
+    box-shadow: 0 0 10px rgba(0, 245, 160, 0.3);
+    outline: none;
+    color: #00f5a0; 
+}
+
+.btn-primary {
+    background-color: #00f5a0;
+    color: #003b24;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    box-shadow: 0 0 15px rgba(0, 245, 160, 0.4);
+    transform: translateY(-1px);
+    background-color: #4edea3;
+}
+
+.btn-glass {
+    background-color: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    transition: all 0.3s ease;
+}
+
+.btn-glass:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: #00f5a0;
+}
+
+.bg-mesh {
+    background-image: 
+        radial-gradient(circle at 15% 50%, rgba(0, 245, 160, 0.15), transparent 25%),
+        radial-gradient(circle at 85% 30%, rgba(0, 165, 114, 0.15), transparent 25%);
+}
