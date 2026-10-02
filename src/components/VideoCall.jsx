@@ -128,12 +128,12 @@ export default function VideoCall({ isCaller, targetUserId, targetUser, onEndCal
   };
 
   return (
-    <div className="fixed inset-0 z-[100] bg-black/95 flex flex-col items-center justify-center backdrop-blur-sm p-4">
-      <div className="relative w-full max-w-5xl aspect-video bg-[#09101b] rounded-2xl overflow-hidden shadow-2xl ring-1 ring-white/10 flex items-center justify-center">
+    <div className="fixed inset-0 z-[100] bg-black flex flex-col items-center justify-center">
+      <div className="relative w-full h-[100dvh] md:max-w-6xl md:h-[85vh] bg-[#09101b] md:rounded-2xl overflow-hidden shadow-2xl flex items-center justify-center">
         
         {/* Call Status Overlay (when connecting) */}
         {callStatus !== 'Connected' && (
-          <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-black/50 backdrop-blur-sm">
+          <div className="absolute inset-0 z-40 flex flex-col items-center justify-center bg-black/80 backdrop-blur-md">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-500 mb-4"></div>
             <p className="text-white text-lg font-medium tracking-wide">{callStatus}</p>
           </div>
@@ -160,7 +160,7 @@ export default function VideoCall({ isCaller, targetUserId, targetUser, onEndCal
         
         {/* Local Video (PiP) - Hidden if audio only */}
         {callType === 'video' && (
-          <div className="absolute bottom-6 right-6 w-32 md:w-48 aspect-video bg-black rounded-xl overflow-hidden shadow-[0_0_20px_rgba(0,0,0,0.5)] ring-2 ring-emerald-500/50 z-20">
+          <div className="absolute top-6 right-4 md:top-8 md:right-8 w-28 h-40 md:w-56 md:h-36 bg-black rounded-xl overflow-hidden shadow-[0_0_20px_rgba(0,0,0,0.8)] ring-2 ring-emerald-500/50 z-20">
             <video 
               ref={localVideoRef} 
               autoPlay 
@@ -172,13 +172,13 @@ export default function VideoCall({ isCaller, targetUserId, targetUser, onEndCal
         )}
 
         {/* Controls */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-6 z-20 bg-black/40 backdrop-blur-md px-6 py-3 rounded-full border border-white/10">
+        <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex items-center gap-6 z-30 bg-black/50 backdrop-blur-xl px-8 py-4 rounded-full border border-white/10 shadow-2xl">
           <button 
             onClick={endCall}
-            className="w-14 h-14 bg-red-500 hover:bg-red-600 rounded-full flex items-center justify-center shadow-lg transition-all hover:scale-105 active:scale-95"
+            className="w-16 h-16 bg-red-500 hover:bg-red-600 rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(239,68,68,0.4)] transition-all hover:scale-105 active:scale-95"
             title="End Call"
           >
-            <span className="material-symbols-outlined text-white text-2xl">call_end</span>
+            <span className="material-symbols-outlined text-white text-3xl">call_end</span>
           </button>
         </div>
       </div>
