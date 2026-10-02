@@ -147,56 +147,60 @@ export default function VideoCall({ isCaller, targetUserId, targetUser, onEndCal
 
     const newFacingMode = facingMode === "user" ? "environment" : "user";
     
+    // Stop old video track FIRST to release hardware lock on mobile devices (crucial for iOS/Android)
+    const oldVideoTrack = localStreamRef.current.getVideoTracks()[0];
+    if (oldVideoTrack) {
+      oldVideoTrack.stop();
+      localStreamRef.current.removeTrack(oldVideoTrack);
+    }
+
     try {
-      const newStream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: { exact: newFacingMode } },
-        audio: false // Only request video to switch camera
-      });
+      let newStream;
+      try {
+        newStream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: { exact: newFacingMode } }
+        });
+      } catch (err) {
+        // Fallback if 'exact' is not supported by the device browser
+        newStream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: newFacingMode }
+        });
+      }
 
       const newVideoTrack = newStream.getVideoTracks()[0];
       
-      const sender = peerConnectionRef.current.getSenders().find(s => s.track.kind === 'video');
+      const sender = peerConnectionRef.current.getSenders().find(s => s.track && s.track.kind === 'video');
       if (sender) {
         sender.replaceTrack(newVideoTrack);
-      }
-
-      const oldVideoTrack = localStreamRef.current.getVideoTracks()[0];
-      if (oldVideoTrack) {
-        oldVideoTrack.stop();
-        localStreamRef.current.removeTrack(oldVideoTrack);
       }
       
       localStreamRef.current.addTrack(newVideoTrack);
       
       if (localVideoRef.current) {
-        localVideoRef.current.srcObject = localStreamRef.current;
+        // Create a fresh MediaStream to ensure the React `<video>` element updates correctly
+        localVideoRef.current.srcObject = new MediaStream(localStreamRef.current.getTracks());
       }
 
       setFacingMode(newFacingMode);
-    } catch (err) {
-      console.error("Exact facingMode failed, falling back", err);
+    } catch (error) {
+      console.error("Error flipping camera completely:", error);
+      
+      // If flipping fails, try to aggressively restore the original camera so they don't get a black screen
       try {
-        const fallbackStream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: newFacingMode },
-          audio: false
+        const restoreStream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: facingMode }
         });
-        const fallbackTrack = fallbackStream.getVideoTracks()[0];
-        const sender = peerConnectionRef.current.getSenders().find(s => s.track.kind === 'video');
-        if (sender) sender.replaceTrack(fallbackTrack);
+        const restoreTrack = restoreStream.getVideoTracks()[0];
         
-        const oldVideoTrack = localStreamRef.current.getVideoTracks()[0];
-        if (oldVideoTrack) {
-          oldVideoTrack.stop();
-          localStreamRef.current.removeTrack(oldVideoTrack);
-        }
+        const sender = peerConnectionRef.current.getSenders().find(s => s.track && s.track.kind === 'video');
+        if (sender) sender.replaceTrack(restoreTrack);
         
-        localStreamRef.current.addTrack(fallbackTrack);
+        localStreamRef.current.addTrack(restoreTrack);
         if (localVideoRef.current) {
-          localVideoRef.current.srcObject = localStreamRef.current;
+          localVideoRef.current.srcObject = new MediaStream(localStreamRef.current.getTracks());
         }
-        setFacingMode(newFacingMode);
-      } catch (fallbackErr) {
-        console.error("Camera flip failed:", fallbackErr);
+      } catch (restoreErr) {
+        console.error("Failed to restore camera:", restoreErr);
       }
     }
   };
@@ -246,7 +250,7 @@ export default function VideoCall({ isCaller, targetUserId, targetUser, onEndCal
               autoPlay 
               playsInline 
               muted 
-              className="w-full h-full object-cover transform -scale-x-100"
+              className={`w-full h-full object-cover transition-transform duration-300 ${facingMode === 'user' ? 'transform -scale-x-100' : ''}`}
             />
           </div>
         )}
