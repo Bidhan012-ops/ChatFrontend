@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { socket } from '../lib/socket';
 
 export default function VideoCall({ isCaller, targetUserId, targetUser, onEndCall, incomingOffer, callType = 'video' }) {
@@ -7,13 +8,33 @@ export default function VideoCall({ isCaller, targetUserId, targetUser, onEndCal
   const peerConnectionRef = useRef(null);
   const localStreamRef = useRef(null); // Ref to hold stream for cleanup
   const [callStatus, setCallStatus] = useState(isCaller ? 'Calling...' : 'Connecting...');
+  const [facingMode, setFacingMode] = useState("user");
+  const [callDuration, setCallDuration] = useState(0);
+
+  useEffect(() => {
+    let intervalId;
+    if (callStatus === 'Connected') {
+      intervalId = setInterval(() => {
+        setCallDuration(prev => prev + 1);
+      }, 1000);
+    }
+    return () => {
+      if (intervalId) clearInterval(intervalId);
+    };
+  }, [callStatus]);
+
+  const formatTime = (seconds) => {
+    const m = Math.floor(seconds / 60).toString().padStart(2, '0');
+    const s = (seconds % 60).toString().padStart(2, '0');
+    return `${m}:${s}`;
+  };
 
   useEffect(() => {
     const initCall = async () => {
       try {
         // 1. Get Local Stream
         const stream = await navigator.mediaDevices.getUserMedia({ 
-          video: callType === 'video', 
+          video: callType === 'video' ? { facingMode: "user" } : false, 
           audio: true 
         });
         localStreamRef.current = stream;
@@ -121,15 +142,74 @@ export default function VideoCall({ isCaller, targetUserId, targetUser, onEndCal
     }
   };
 
+  const flipCamera = async () => {
+    if (callType !== 'video' || !localStreamRef.current || !peerConnectionRef.current) return;
+
+    const newFacingMode = facingMode === "user" ? "environment" : "user";
+    
+    try {
+      const newStream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: { exact: newFacingMode } },
+        audio: false // Only request video to switch camera
+      });
+
+      const newVideoTrack = newStream.getVideoTracks()[0];
+      
+      const sender = peerConnectionRef.current.getSenders().find(s => s.track.kind === 'video');
+      if (sender) {
+        sender.replaceTrack(newVideoTrack);
+      }
+
+      const oldVideoTrack = localStreamRef.current.getVideoTracks()[0];
+      if (oldVideoTrack) {
+        oldVideoTrack.stop();
+        localStreamRef.current.removeTrack(oldVideoTrack);
+      }
+      
+      localStreamRef.current.addTrack(newVideoTrack);
+      
+      if (localVideoRef.current) {
+        localVideoRef.current.srcObject = localStreamRef.current;
+      }
+
+      setFacingMode(newFacingMode);
+    } catch (err) {
+      console.error("Exact facingMode failed, falling back", err);
+      try {
+        const fallbackStream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: newFacingMode },
+          audio: false
+        });
+        const fallbackTrack = fallbackStream.getVideoTracks()[0];
+        const sender = peerConnectionRef.current.getSenders().find(s => s.track.kind === 'video');
+        if (sender) sender.replaceTrack(fallbackTrack);
+        
+        const oldVideoTrack = localStreamRef.current.getVideoTracks()[0];
+        if (oldVideoTrack) {
+          oldVideoTrack.stop();
+          localStreamRef.current.removeTrack(oldVideoTrack);
+        }
+        
+        localStreamRef.current.addTrack(fallbackTrack);
+        if (localVideoRef.current) {
+          localVideoRef.current.srcObject = localStreamRef.current;
+        }
+        setFacingMode(newFacingMode);
+      } catch (fallbackErr) {
+        console.error("Camera flip failed:", fallbackErr);
+      }
+    }
+  };
+
   const endCall = () => {
     socket.emit("webrtc-end-call", { targetId: targetUserId });
     cleanup();
     onEndCall();
   };
 
-  return (
-    <div className="fixed inset-0 z-[100] bg-black flex flex-col items-center justify-center">
-      <div className="relative w-full h-[100dvh] md:max-w-6xl md:h-[85vh] bg-[#09101b] md:rounded-2xl overflow-hidden shadow-2xl flex items-center justify-center">
+  return createPortal(
+    <div className="fixed inset-0 z-[9999] bg-black flex flex-col items-center justify-center">
+      <div className="relative w-full h-[100dvh] md:max-w-6xl md:h-[85vh] bg-[#09101b] md:rounded-2xl overflow-hidden shadow-[0_0_100px_rgba(0,0,0,1)] flex items-center justify-center">
         
         {/* Call Status Overlay (when connecting) */}
         {callStatus !== 'Connected' && (
@@ -154,7 +234,7 @@ export default function VideoCall({ isCaller, targetUserId, targetUser, onEndCal
               <img src={targetUser?.profilepic || targetUser?.profilePic || `https://ui-avatars.com/api/?name=${encodeURIComponent(targetUser?.name || 'User')}&background=random`} alt={targetUser?.name} className="w-full h-full object-cover" />
             </div>
             <h2 className="text-3xl font-semibold text-white">{targetUser?.name || "User"}</h2>
-            <p className="text-emerald-400 mt-2">{callStatus === 'Connected' ? '00:00' : callStatus}</p>
+            <p className="text-emerald-400 mt-2">{callStatus === 'Connected' ? formatTime(callDuration) : callStatus}</p>
           </div>
         )}
         
@@ -173,6 +253,17 @@ export default function VideoCall({ isCaller, targetUserId, targetUser, onEndCal
 
         {/* Controls */}
         <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex items-center gap-6 z-30 bg-black/50 backdrop-blur-xl px-8 py-4 rounded-full border border-white/10 shadow-2xl">
+          
+          {callType === 'video' && (
+            <button 
+              onClick={flipCamera}
+              className="w-12 h-12 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center transition-all hover:scale-105 active:scale-95"
+              title="Flip Camera"
+            >
+              <span className="material-symbols-outlined text-white text-2xl">flip_camera_ios</span>
+            </button>
+          )}
+
           <button 
             onClick={endCall}
             className="w-16 h-16 bg-red-500 hover:bg-red-600 rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(239,68,68,0.4)] transition-all hover:scale-105 active:scale-95"
@@ -182,6 +273,7 @@ export default function VideoCall({ isCaller, targetUserId, targetUser, onEndCal
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
