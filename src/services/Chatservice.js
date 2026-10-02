@@ -1,20 +1,20 @@
 import axios from "axios";
 export const fetchchats = () => {
-    return axios.get("http://localhost:5000/api/chats/fetchchats",
+    return axios.get("https://chatbackend-5lt8.onrender.com/api/chats/fetchchats",
         {
             withCredentials: true
         }
     );
 }
 export const searchuser = (text) => {
-    return axios.get(`http://localhost:5000/api/basic/finduser?searchedUser=${text}`,
+    return axios.get(`https://chatbackend-5lt8.onrender.com/api/basic/finduser?searchedUser=${text}`,
         {
             withCredentials: true
         }
     );
 }
 export const accessChat = (targetUserId) => {
-    return axios.post("http://localhost:5000/api/chats/accesschat",
+    return axios.post("https://chatbackend-5lt8.onrender.com/api/chats/accesschat",
         {
             targetUserId,
         },
@@ -24,14 +24,14 @@ export const accessChat = (targetUserId) => {
     );
 }
 export const fetchmessages = (chatId) => {
-    return axios.get(`http://localhost:5000/api/messages/fetchmessages/${chatId}`,
+    return axios.get(`https://chatbackend-5lt8.onrender.com/api/messages/fetchmessages/${chatId}`,
         {
             withCredentials: true
         }
     );
 }
 export const sendmessage = (data) => {
-    return axios.post(`http://localhost:5000/api/messages/sendmessage`,
+    return axios.post(`https://chatbackend-5lt8.onrender.com/api/messages/sendmessage`,
         data,
         {
             withCredentials: true
@@ -39,7 +39,7 @@ export const sendmessage = (data) => {
     );
 }
 export const getuserdetails = (targetuserId) => {
-    return axios.post(`http://localhost:5000/api/basic/userdetails`,
+    return axios.post(`https://chatbackend-5lt8.onrender.com/api/basic/userdetails`,
         {
             targetuserId
         },
@@ -50,7 +50,7 @@ export const getuserdetails = (targetuserId) => {
 }
 
 export const markAsRead = (targetUserId) => {
-    return axios.put(`http://localhost:5000/api/messages/mark-read`,
+    return axios.put(`https://chatbackend-5lt8.onrender.com/api/messages/mark-read`,
         {
             targetUserId
         },
@@ -60,7 +60,7 @@ export const markAsRead = (targetUserId) => {
     );
 }
 export const updateprofile = (fullName, bio, profilePic) => {
-    return axios.put(`http://localhost:5000/api/basic/updateprofile`,
+    return axios.put(`https://chatbackend-5lt8.onrender.com/api/basic/updateprofile`,
         {
             fullName,
             bio,

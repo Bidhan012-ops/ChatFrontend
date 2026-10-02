@@ -11,7 +11,7 @@ export const AuthProvider = ({ children }) => {
         // 2. Ask the backend if the HttpOnly cookie is valid
         const checkLoggedIn = async () => {
             try {
-                const { data } = await axios.get('http://localhost:5000/api/auth/me', {
+                const { data } = await axios.get('https://chatbackend-5lt8.onrender.com/api/auth/me', {
                     withCredentials: true
                 });
                 // console.log("The user in the authcontext is: ", data);
