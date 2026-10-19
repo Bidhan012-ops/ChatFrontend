@@ -55,11 +55,11 @@ NeonChat is architected with a decoupled **Client-Server model**:
 
 ```mermaid
 flowchart TB
-    subgraph ClientLayer["🖥️ Frontend Client (React 19 + Vite)"]
-        UI["Tailwind CSS Glassmorphic UI\n(Sidebar, ChatArea, VideoModal)"]
-        AuthCtx["Auth Context\n(Session & User State)"]
-        SocketClient["Socket.io Client\n(Realtime Gateway)"]
-        WebRTC["WebRTC RTCPeerConnection\n(Audio / Video Stream)"]
+    subgraph ClientA["🖥️ Client A (Browser)"]
+        UIA["Tailwind Glassmorphic UI"]
+        AuthCtx["Auth Context (Session)"]
+        SocketClientA["Socket.io Client"]
+        WebRTCA["WebRTC PeerConnection"]
     end
 
     subgraph ServerLayer["⚙️ Backend Server (Node.js + Express 5 + TS)"]
@@ -70,26 +70,36 @@ flowchart TB
     end
 
     subgraph DataLayer["💾 Cloud & Data Services"]
-        MongoDB[("MongoDB Database\n(Users, Chats, Messages)")]
+        MongoDB[("MongoDB Atlas Database\n(Users, Chats, Messages)")]
         Cloudinary["Cloudinary CDN\n(Image & Avatar Storage)"]
         STUN["Google STUN Servers\n(NAT Traversal / ICE)"]
     end
 
-    %% Frontend to Backend Connections
-    UI -->|HTTP / Axios with Cookies| RESTRouter
-    AuthCtx -->|Check Session /me| RESTRouter
-    RESTRouter --> AuthMW
-    SocketClient <-->|WebSocket bi-directional| SocketServer
+    subgraph ClientB["🖥️ Client B (Peer Browser)"]
+        UIB["Tailwind Glassmorphic UI"]
+        SocketClientB["Socket.io Client"]
+        WebRTCB["WebRTC PeerConnection"]
+    end
 
-    %% Backend to Data Layer
+    %% Client A Connections
+    UIA -->|HTTP / Axios with Cookies| RESTRouter
+    AuthCtx -->|Check Session /me| RESTRouter
+    SocketClientA <-->|WebSocket Bi-directional| SocketServer
+
+    %% Client B Connections
+    UIB -->|HTTP / Axios with Cookies| RESTRouter
+    SocketClientB <-->|WebSocket Bi-directional| SocketServer
+
+    %% Backend Server to Data Services
+    RESTRouter --> AuthMW
     AuthMW -->|Mongoose Queries| MongoDB
     RESTRouter -->|Mongoose Models| MongoDB
-    MulterStorage -->|Uploads & Transformations| Cloudinary
+    MulterStorage -->|Uploads & Face-Crop Transformations| Cloudinary
 
-    %% WebRTC Signaling & Media
-    SocketClient -->|Signaling: Offer, Answer, ICE| SocketServer
-    WebRTC <-->|STUN Candidate Discovery| STUN
-    WebRTC <===>|Encrypted P2P Media Stream (SRTP)| WebRTC
+    %% WebRTC Signaling & Peer-to-Peer Media
+    WebRTCA <-->|STUN Candidate Discovery| STUN
+    WebRTCB <-->|STUN Candidate Discovery| STUN
+    WebRTCA <-->|Encrypted P2P Media Stream (SRTP)| WebRTCB
 ```
 
 ---
@@ -101,12 +111,12 @@ This diagram shows how users sign up, search for each other, and begin exchangin
 ```mermaid
 sequenceDiagram
     autonumber
-    actor Alice as 👤 Alice (User A)
-    actor Bob as 👤 Bob (User B)
-    participant UI as 💻 Frontend Client
-    participant API as ⚙️ Express Backend
-    participant DB as 🗄️ MongoDB Atlas
-    participant WS as ⚡ Socket.io Server
+    actor Alice as "Alice (User A)"
+    actor Bob as "Bob (User B)"
+    participant UI as "Frontend Client"
+    participant API as "Express Backend"
+    participant DB as "MongoDB Atlas"
+    participant WS as "Socket.io Server"
 
     Note over Alice, Bob: Both Alice and Bob Sign Up & Sign In
     Alice->>API: POST /api/auth/signup (Alice details)
@@ -159,12 +169,12 @@ sequenceDiagram
 ```mermaid
 sequenceDiagram
     autonumber
-    actor Alice as 👤 Alice (Caller)
-    actor Bob as 👤 Bob (Receiver)
-    participant AliceClient as 💻 Alice's Browser
-    participant STUN as 🌐 Google STUN Servers
-    participant WS as ⚡ Socket.io (Signaling)
-    participant BobClient as 💻 Bob's Browser
+    actor Alice as "Alice (Caller)"
+    actor Bob as "Bob (Receiver)"
+    participant AliceClient as "Alice Browser"
+    participant STUN as "Google STUN"
+    participant WS as "Socket.io Server"
+    participant BobClient as "Bob Browser"
 
     Alice->>AliceClient: Clicks Video Call button
     AliceClient->>AliceClient: getUserMedia({ video: true, audio: true })
@@ -190,7 +200,8 @@ sequenceDiagram
     BobClient->>AliceClient: pc.addIceCandidate(...)
 
     Note over AliceClient, BobClient: Direct Peer-to-Peer Encrypted Stream Established
-    AliceClient<<==>>BobClient: 🎥 Bidirectional P2P Media Streaming (SRTP)
+    AliceClient->>BobClient: P2P Media Stream (Video/Audio via SRTP)
+    BobClient->>AliceClient: P2P Media Stream (Video/Audio via SRTP)
     AliceClient->>Alice: Display Remote Video & Start Duration Timer
     BobClient->>Bob: Display Remote Video & Start Duration Timer
 ```
