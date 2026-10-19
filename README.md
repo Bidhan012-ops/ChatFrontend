@@ -55,51 +55,51 @@ NeonChat is architected with a decoupled **Client-Server model**:
 
 ```mermaid
 flowchart TB
-    subgraph ClientA["🖥️ Client A (Browser)"]
+    subgraph ClientA["Client A (Browser)"]
         UIA["Tailwind Glassmorphic UI"]
-        AuthCtx["Auth Context (Session)"]
+        AuthCtx["Auth Context"]
         SocketClientA["Socket.io Client"]
         WebRTCA["WebRTC PeerConnection"]
     end
 
-    subgraph ServerLayer["⚙️ Backend Server (Node.js + Express 5 + TS)"]
-        RESTRouter["Express REST API Router\n(/api/auth, /api/chats, /api/messages, /api/basic)"]
-        AuthMW["JWT Cookie Middleware\n(HttpOnly Authentication)"]
-        SocketServer["Socket.io Server\n(Signaling, Rooms & Presence)"]
-        MulterStorage["Multer + Cloudinary Engine\n(Media Handling)"]
+    subgraph ServerLayer["Backend Server (Node.js + Express 5 + TS)"]
+        RESTRouter["Express REST API Router"]
+        AuthMW["JWT Cookie Middleware"]
+        SocketServer["Socket.io Server"]
+        MulterStorage["Multer + Cloudinary Engine"]
     end
 
-    subgraph DataLayer["💾 Cloud & Data Services"]
-        MongoDB[("MongoDB Atlas Database\n(Users, Chats, Messages)")]
-        Cloudinary["Cloudinary CDN\n(Image & Avatar Storage)"]
-        STUN["Google STUN Servers\n(NAT Traversal / ICE)"]
+    subgraph DataLayer["Cloud and Data Services"]
+        MongoDB[("MongoDB Atlas Database")]
+        Cloudinary["Cloudinary CDN"]
+        STUN["Google STUN Servers"]
     end
 
-    subgraph ClientB["🖥️ Client B (Peer Browser)"]
+    subgraph ClientB["Client B (Peer Browser)"]
         UIB["Tailwind Glassmorphic UI"]
         SocketClientB["Socket.io Client"]
         WebRTCB["WebRTC PeerConnection"]
     end
 
     %% Client A Connections
-    UIA -->|HTTP / Axios with Cookies| RESTRouter
-    AuthCtx -->|Check Session /me| RESTRouter
-    SocketClientA <-->|WebSocket Bi-directional| SocketServer
+    UIA -->|HTTP and Axios| RESTRouter
+    AuthCtx -->|Session Auth| RESTRouter
+    SocketClientA <-->|WebSocket Events| SocketServer
 
     %% Client B Connections
-    UIB -->|HTTP / Axios with Cookies| RESTRouter
-    SocketClientB <-->|WebSocket Bi-directional| SocketServer
+    UIB -->|HTTP and Axios| RESTRouter
+    SocketClientB <-->|WebSocket Events| SocketServer
 
     %% Backend Server to Data Services
     RESTRouter --> AuthMW
     AuthMW -->|Mongoose Queries| MongoDB
     RESTRouter -->|Mongoose Models| MongoDB
-    MulterStorage -->|Uploads & Face-Crop Transformations| Cloudinary
+    MulterStorage -->|Media Uploads| Cloudinary
 
-    %% WebRTC Signaling & Peer-to-Peer Media
-    WebRTCA <-->|STUN Candidate Discovery| STUN
-    WebRTCB <-->|STUN Candidate Discovery| STUN
-    WebRTCA <-->|Encrypted P2P Media Stream (SRTP)| WebRTCB
+    %% WebRTC Signaling and Media
+    WebRTCA <-->|ICE Candidates| STUN
+    WebRTCB <-->|ICE Candidates| STUN
+    WebRTCA <-->|Encrypted P2P Media Stream| WebRTCB
 ```
 
 ---
