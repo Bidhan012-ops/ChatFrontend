@@ -8,8 +8,13 @@
 [![Socket.io](https://img.shields.io/badge/Socket.io-Realtime-010101?logo=socket.io&logoColor=white)](https://socket.io/)
 [![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-47A248?logo=mongodb&logoColor=white)](https://www.mongodb.com/)
 [![WebRTC](https://img.shields.io/badge/WebRTC-P2P%20Calls-333333?logo=webrtc&logoColor=white)](https://webrtc.org/)
+[![Backend Repository](https://img.shields.io/badge/GitHub-Backend_Repo-181717?logo=github&logoColor=white)](https://github.com/Bidhan012-ops/ChatBackend)
 
 **NeonChat** is a modern, high-performance real-time messaging and peer-to-peer audio/video calling application built with **React 19**, **Express 5**, **TypeScript**, **MongoDB**, **Socket.io**, and **WebRTC**. It features a glassmorphic dark-neon user interface with real-time user presence tracking, instant user search & discovery, image sharing with Cloudinary integration, and peer-to-peer encrypted media streaming.
+
+### 🔗 Repositories
+- **Backend API & Real-time Server:** [https://github.com/Bidhan012-ops/ChatBackend](https://github.com/Bidhan012-ops/ChatBackend)
+- **Frontend Web Application:** [https://github.com/Bidhan012-ops/ChatFrontend](https://github.com/Bidhan012-ops/ChatFrontend)
 
 ---
 
@@ -433,6 +438,14 @@ chat-app/
 ---
 
 ### 1. Backend Setup
+
+> [!TIP]
+> Backend repository: **[Bidhan012-ops/ChatBackend](https://github.com/Bidhan012-ops/ChatBackend)**  
+> If setting up independently, clone the backend:
+> ```bash
+> git clone https://github.com/Bidhan012-ops/ChatBackend.git
+> cd ChatBackend
+> ```
 
 1. Open your terminal and navigate to `chat-backend`:
    ```bash
